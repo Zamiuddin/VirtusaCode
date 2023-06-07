@@ -15,22 +15,25 @@ import com.app.virtusatest.databinding.ActivityMainBinding
 import com.app.virtusatest.interfaces.AdapterClickListeners
 import com.app.virtusatest.models.BreadsList
 import com.app.virtusatest.models.RandomImage
-import com.app.virtusatest.networkService.ApiState
+import com.app.virtusatest.networkService.UiState
 import com.app.virtusatest.viewmodel.DashboardViewModel
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout.TabGravity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import okhttp3.internal.http2.Http2Reader.Companion.logger
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), AdapterClickListeners {
 
     val dashboardViewModel: DashboardViewModel by viewModels()
     private lateinit var activityMainBinding: ActivityMainBinding
+    private val TAG : String = "MainActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
         loadDogsBreadsList()
         viewModelFlowObservers()
         clickListeners()
@@ -38,7 +41,11 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
 
     private fun clickListeners() {
         activityMainBinding.loadRandom.setOnClickListener {
-            dashboardViewModel.getRandomImages(ApplicationStorage.masterSelectedName!!)
+            ApplicationStorage.masterSelectedName?.let { it1 ->
+                dashboardViewModel.getRandomImages(
+                    it1
+                )
+            }
         }
         activityMainBinding.loadFullList.setOnClickListener {
             loadDogsBreadsList()
@@ -50,11 +57,11 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
         lifecycleScope.launch {
             dashboardViewModel.breadList.collect {
                 when (it) {
-                    is ApiState.Success -> {
+                    is UiState.Success -> {
                         val breadsList: BreadsList = it.data as BreadsList
-                        println("==in if --")
+                        Log.i(TAG , "in is")
                         if (breadsList.message.size > 0) {
-                            println("==in if if --")
+                            Log.i(TAG , "in if")
                             activityMainBinding.SubListEmpty.isVisible = false
                             activityMainBinding.heading.text = "Breeds List"
                             activityMainBinding.breadsList.layoutManager =
@@ -64,10 +71,10 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
                         }
 
                     }
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.d("", it.toString())
                     }
-                    is ApiState.Failure -> {
+                    is UiState.Failure -> {
                         showMessage(it.msg.toString())
                     }
                     else -> {}
@@ -78,10 +85,9 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
         lifecycleScope.launch {
             dashboardViewModel.breadListSub.collect {
                 when (it) {
-                    is ApiState.Success -> {
+                    is UiState.Success -> {
                         val breadsList: BreadsList = it.data as BreadsList
-                        println("==in if --$breadsList")
-                        println("==in if if --")
+                        Log.i(TAG , "$breadsList")
                         activityMainBinding.heading.text = "${ApplicationStorage.masterSelectedName}Breeds Sub List"
                         activityMainBinding.breadsList.layoutManager =
                             LinearLayoutManager(this@MainActivity)
@@ -91,10 +97,10 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
                         activityMainBinding.SubListEmpty.isVisible = breadsList.message.size <= 0
 
                     }
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.d("", it.toString())
                     }
-                    is ApiState.Failure -> {
+                    is UiState.Failure -> {
                         showMessage(it.msg.toString())
                     }
                     else -> {}
@@ -105,12 +111,11 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
         lifecycleScope.launch {
             dashboardViewModel.breadListSubImages.collect {
                 when (it) {
-                    is ApiState.Success -> {
+                    is UiState.Success -> {
                         val breadsList: BreadsList = it.data as BreadsList
-                        println("==in if --$breadsList")
+                        Log.i(TAG , "$breadsList")
                         if (breadsList.message.size > 0) {
                             activityMainBinding.subBreadsListImages.isVisible = true
-                            println("==in if if --")
                             activityMainBinding.subBreadsListImages.layoutManager =
                                 LinearLayoutManager(
                                     this@MainActivity,
@@ -124,10 +129,10 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
                         }
 
                     }
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.d("", it.toString())
                     }
-                    is ApiState.Failure -> {
+                    is UiState.Failure -> {
                         showMessage(it.msg.toString())
                     }
                     else -> {}
@@ -138,8 +143,8 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
         lifecycleScope.launch {
             dashboardViewModel.breadLisrandomImages.collect {
                 when (it) {
-                    is ApiState.Success -> {
-                        println("==in if --${it.data}")
+                    is UiState.Success -> {
+                        Log.i(TAG , "${it.data}")
                         val breadsList: RandomImage = it.data as RandomImage
 
                         Glide.with(this@MainActivity)
@@ -148,10 +153,10 @@ class MainActivity : AppCompatActivity(), AdapterClickListeners {
                             .into(activityMainBinding.RandomImages)
 
                     }
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.d("", it.toString())
                     }
-                    is ApiState.Failure -> {
+                    is UiState.Failure -> {
                         showMessage(it.msg.toString())
                     }
                     else -> {}

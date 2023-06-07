@@ -2,7 +2,7 @@ package com.app.virtusatest
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.app.virtusatest.models.BreadsList
-import com.app.virtusatest.networkService.ApiState
+import com.app.virtusatest.networkService.UiState
 import com.app.virtusatest.repository.MainRepository
 import com.app.virtusatest.viewmodel.DashboardViewModel
 import com.nhaarman.mockito_kotlin.whenever
@@ -45,8 +45,8 @@ class DashBoardViewModelTest {
     @Test
     fun `test getBreadList success`() = testScope.runBlockingTest {
         val breadList: Flow<BreadsList> =
-            flowOf(BreadsList(arrayListOf("qwerty", "qawseed"), "sucess"))
-        val expectedState = ApiState.Success(breadList)
+            flowOf(BreadsList(arrayListOf(TestingConstants.QWERTY, TestingConstants.KEYBOARD), TestingConstants.SUCCESS))
+        val expectedState = UiState.Success(breadList)
 
         // Mock the API response from the repository
         whenever(mainRepository.getBreadList()).thenReturn(breadList)
@@ -63,8 +63,8 @@ class DashBoardViewModelTest {
 
     @Test
     fun `test getBreadList failure`() = testScope.runBlockingTest {
-        val exception = RuntimeException("API error")
-        val expectedState = ApiState.Failure(exception)
+        val exception = RuntimeException(TestingConstants.APIERROR)
+        val expectedState = UiState.Failure(exception)
 
         // Mock the API call to throw an exception
         whenever(mainRepository.getBreadList()).thenThrow(exception)
@@ -81,16 +81,3 @@ class DashBoardViewModelTest {
 }
 
 
-// Reusable JUnit4 TestRule to override the Main dispatcher
-@OptIn(ExperimentalCoroutinesApi::class)
-class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
-}

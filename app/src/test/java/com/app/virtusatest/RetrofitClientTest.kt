@@ -40,7 +40,7 @@ class RetrofitClientTest {
     @Test
     fun `test successful API call`() = runBlocking {
         val expectedResponse = BreadsList()
-        val url = "http://example.com/api"
+        val url = "https://dog.ceo/api/"
 
         // Create a mock Response object with a successful response
         // val response = Response.success(expectedResponse)
@@ -61,10 +61,10 @@ class RetrofitClientTest {
 
     @Test(expected = RuntimeException::class)
     fun `test API call failure`() = runBlocking {
-        val url = "http://example.com/api"
+        val url = "https://dog.ceo/api/"
 
         // Create a mock Response object with a failure response
-        val response = Response.error<String>(400, "Error".toResponseBody(null))
+        val response = Response.error<String>(400, TestingConstants.ERROR.toResponseBody(null))
 
         // Mock the ApiService method to return the mock Response object
         whenever(apiService.getBreadList()).thenReturn(response)

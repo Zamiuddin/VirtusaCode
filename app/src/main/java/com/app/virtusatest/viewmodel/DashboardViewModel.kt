@@ -2,7 +2,7 @@ package  com.app.virtusatest.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.virtusatest.networkService.ApiState
+import com.app.virtusatest.networkService.UiState
 import com.app.virtusatest.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,48 +16,48 @@ class DashboardViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : ViewModel() {
 
-    private val breadListMutable: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Empty)
-    val breadList: StateFlow<ApiState> = breadListMutable
+    private val breadListMutable: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
+    val breadList: StateFlow<UiState> = breadListMutable
 
-    private val breadListSubMutable: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Empty)
-    val breadListSub: StateFlow<ApiState> = breadListSubMutable
+    private val breadListSubMutable: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
+    val breadListSub: StateFlow<UiState> = breadListSubMutable
 
 
-    private val breadListSubImagesMutable: MutableStateFlow<ApiState> =
-        MutableStateFlow(ApiState.Empty)
-    val breadListSubImages: StateFlow<ApiState> = breadListSubImagesMutable
+    private val breadListSubImagesMutable: MutableStateFlow<UiState> =
+        MutableStateFlow(UiState.Empty)
+    val breadListSubImages: StateFlow<UiState> = breadListSubImagesMutable
 
-    private val breadLisrandomImagesMutable: MutableStateFlow<ApiState> =
-        MutableStateFlow(ApiState.Empty)
-    val breadLisrandomImages: StateFlow<ApiState> = breadLisrandomImagesMutable
+    private val breadLisrandomImagesMutable: MutableStateFlow<UiState> =
+        MutableStateFlow(UiState.Empty)
+    val breadLisrandomImages: StateFlow<UiState> = breadLisrandomImagesMutable
 
 
     fun getBreadList() = viewModelScope.launch {
-        breadListMutable.value = ApiState.Loading
-        mainRepository.getBreadList().catch { e -> breadListMutable.value = ApiState.Failure(e) }
-            .collect { data -> breadListMutable.value = ApiState.Success(data) }
+        breadListMutable.value = UiState.Loading
+        mainRepository.getBreadList().catch { e -> breadListMutable.value = UiState.Failure(e) }
+            .collect { data -> breadListMutable.value = UiState.Success(data) }
     }
 
     fun getBreadSubList(name: String) = viewModelScope.launch {
-        breadListSubMutable.value = ApiState.Loading
+        breadListSubMutable.value = UiState.Loading
         mainRepository.getBreadSubList(name)
-            .catch { e -> breadListSubMutable.value = ApiState.Failure(e) }
-            .collect { data -> breadListSubMutable.value = ApiState.Success(data) }
+            .catch { e -> breadListSubMutable.value = UiState.Failure(e) }
+            .collect { data -> breadListSubMutable.value = UiState.Success(data) }
     }
 
 
     fun getBreadSubListImages(name: String) = viewModelScope.launch {
-        breadListSubImagesMutable.value = ApiState.Loading
+        breadListSubImagesMutable.value = UiState.Loading
         mainRepository.getBreadSubListImages(name)
-            .catch { e -> breadListSubImagesMutable.value = ApiState.Failure(e) }
-            .collect { data -> breadListSubImagesMutable.value = ApiState.Success(data) }
+            .catch { e -> breadListSubImagesMutable.value = UiState.Failure(e) }
+            .collect { data -> breadListSubImagesMutable.value = UiState.Success(data) }
     }
 
     fun getRandomImages(name: String) = viewModelScope.launch {
-        breadLisrandomImagesMutable.value = ApiState.Loading
+        breadLisrandomImagesMutable.value = UiState.Loading
         mainRepository.getRandomImages(name)
-            .catch { e -> breadLisrandomImagesMutable.value = ApiState.Failure(e) }
-            .collect { data -> breadLisrandomImagesMutable.value = ApiState.Success(data) }
+            .catch { e -> breadLisrandomImagesMutable.value = UiState.Failure(e) }
+            .collect { data -> breadLisrandomImagesMutable.value = UiState.Success(data) }
     }
 
 }

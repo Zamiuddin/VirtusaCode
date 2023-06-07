@@ -1,7 +1,9 @@
 package com.app.virtusatest
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.app.virtusatest.networkService.UiState
 import com.app.virtusatest.viewmodel.DashboardViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -31,18 +33,18 @@ class MainActivityTest {
     fun `test something in MainActivity`() {
         // Mock any necessary dependencies or setup for the ViewModel
         // For example:
-        val expectedResult = "Test Result"
+        val expectedResult =  MutableStateFlow(UiState.Empty)
         `when`(viewModel.breadList).thenReturn(expectedResult)
 
         // Call the method or perform the action in the Activity that you want to test
         // For example:
-        activity.showMessage("Success")
+        activity.showMessage(TestingConstants.SUCCESS)
 
         // Verify the expected behavior or outcome
         // For example:
         // Assert that a specific method or property was called on the ViewModel
 
         // Assert the expected result or state in the Activity
-        assertEquals(expectedResult, activity.showMessage("Success"))
+        assertEquals(expectedResult, activity.showMessage(TestingConstants.SUCCESS))
     }
 }
