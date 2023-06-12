@@ -1,7 +1,8 @@
 package  com.app.virtusatest.di
 
 
-import com.app.virtusatest.BuildConfig
+
+import androidx.databinding.ktx.BuildConfig
 import com.app.virtusatest.networkService.ApiService
 import com.app.virtusatest.networkService.AppAPi
 import dagger.Module
