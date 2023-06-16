@@ -2,8 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id ("kotlin-kapt")
-    id "com.google.dagger.hilt.android"
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -41,89 +41,82 @@ android {
 
     // Set the Compose version
     composeOptions {
-        kotlinCompilerVersion "1.5.21"
-        kotlinCompilerExtensionVersion "1.0.1"
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'androidx.databinding:databinding-runtime:8.0.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
+    // For Jetpack compose
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
 
-    implementation 'com.google.code.gson:gson:2.10'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit:retrofit-converters:2.0.0-beta2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
-    implementation "androidx.activity:activity-ktx:1.7.1"
-    implementation 'androidx.room:room-runtime:2.6.0-alpha01'
-    implementation 'androidx.room:room-ktx:2.6.0-alpha01'
-    implementation 'com.google.dagger:hilt-android:2.46.1'
-    kapt  'com.google.dagger:hilt-android-compiler:2.46.1'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
-    implementation "androidx.fragment:fragment-ktx:1.5.7"
-    kapt 'androidx.room:room-compiler:2.6.0-alpha01'
-    implementation "androidx.navigation:navigation-compose:2.5.3"
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-    implementation 'com.karumi:dexter:6.2.2'
-
-    testImplementation 'org.mockito:mockito-core:4.0.0'
-    testImplementation "org.mockito:mockito-inline:3.0.0"
-    testImplementation 'io.mockk:mockk:1.12.2'
-    androidTestImplementation 'org.mockito:mockito-android:2.24.5'
-    implementation 'androidx.arch.core:core-testing:2.2.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    testImplementation 'app.cash.turbine:turbine:0.11.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'
-    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
-
-    // Jetpack Compose
-    implementation 'androidx.compose.ui:ui:1.0.1'
-    implementation 'androidx.compose.material:material:1.0.1'
-    implementation 'androidx.compose.ui:ui-tooling:1.0.1'
-    implementation 'androidx.compose.runtime:runtime:1.0.1'
-
-    // For Retrofit2 and Moshi
-    api "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    // For Material design
+    implementation "androidx.compose.material:material:$material_compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
+    implementation "com.google.android.material:material:$android_material_version"
 
     // For Hilt dependency injection
-    implementation "com.google.dagger:hilt-android:2.43.2"
-    implementation "androidx.appcompat:appcompat:1.5.1"
-    kapt "com.google.dagger:hilt-compiler:2.43.2"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation "androidx.appcompat:appcompat:$app_compat_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:$hilt_nav_version"
 
-    // For Coil
-    implementation "io.coil-kt:coil:2.2.0"
-    implementation "io.coil-kt:coil-compose:2.2.0"
-    implementation "io.coil-kt:coil-svg:2.2.0"
+    // For Okhttp3
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
-    // For View pager
-    implementation "com.google.accompanist:accompanist-pager:0.25.1"
+    // For Retrofit2 and Moshi
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // For Room Persistence
+    implementation "androidx.room:room-ktx:$room"
+    kapt "androidx.room:room-compiler:$room"
+
+    // For Compose navigation
+    implementation "androidx.navigation:navigation-compose:$nav_compose_version"
 
     // For Navigation animation
-    implementation "com.google.accompanist:accompanist-navigation-animation:0.25.1"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
-}
-kapt {
-    correctErrorTypes true
+    // For View pager
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+
+    // For Coil
+    implementation "io.coil-kt:coil:$coil_version"
+    implementation "io.coil-kt:coil-compose:$coil_version"
+    implementation "io.coil-kt:coil-svg:$coil_version"
+
+    // For Mockk
+    testImplementation "io.mockk:mockk:$mockk_version"
+
+    // For Coroutines testing
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+
+    // For Kotest
+    testImplementation "io.kotest:kotest-assertions-core:$kotest_version"
+    testApi "org.jetbrains.kotlin:kotlin-test"
+
+    // For Junit
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+
+    // For Espresso
+    androidTestImplementation "androidx.test.espresso:espresso-core:$epresso_version"
+    androidTestImplementation "com.google.truth:truth:$truth_version"
+
+    // For Jetpack Compose UI testing (can be uncommented in future)
+    /*androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"*/
+
 }
